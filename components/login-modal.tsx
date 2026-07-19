@@ -60,7 +60,7 @@ export function LoginModal({ open, onClose, onAuthed }: LoginModalProps) {
         setError(
           error.message?.includes("exists") || error.status === 422
             ? "Ese correo ya está registrado. Inicia sesión."
-            : "No se pudo crear la cuenta. La contraseña debe tener al menos 8 caracteres.",
+            : error.message || "No se pudo crear la cuenta. Intenta de nuevo.",
         )
         return
       }
@@ -72,7 +72,7 @@ export function LoginModal({ open, onClose, onAuthed }: LoginModalProps) {
     const { error } = await authClient.signIn.email({ email, password })
     if (error) {
       setLoading(false)
-      setError("Correo o contraseña incorrectos.")
+      setError(error.message || "Correo o contraseña incorrectos.")
       return
     }
     setLoading(false)
